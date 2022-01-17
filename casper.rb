@@ -3,20 +3,10 @@ require 'ruby-progressbar'
 
 NUM_QUESTIONS_TOTAL = 12
 NUM_QUESTIONS_PER_PERIOD = 6
-
-# Fake variables for testing # TODO Remove
-WELCOME_TIME_S = 1
-SCENARIO_TIME_S = 1
-QUESTION_TIME_S = 1
-BREAK_TIME_S = 1
-
-# Real variables TODO Enable
-# WELCOME_TIME_S = 15
-# SCENARIO_TIME_S = 60
-# QUESTION_TIME_S = 5 * 60
-# BREAK_TIME_S = 10 * 60
-
-PROGRESS_BAR_MAX_ITERATIONS = 80
+WELCOME_TIME_S = 15
+SCENARIO_TIME_S = 60
+QUESTION_TIME_S = 5 * 60
+BREAK_TIME_S = 10 * 60
 
 def display_welcome
     system "clear"
@@ -44,7 +34,7 @@ end
 
 def display_break
     system "clear"
-    puts "This is a break"
+    puts "Break Time".colorize(:yellow)
     puts "\n"
     display_progress_bar(BREAK_TIME_S)
 end
@@ -79,6 +69,12 @@ while scenario_index <= NUM_QUESTIONS_TOTAL do
         display_questions(scenario_index)
         scenario_index += 1
     end
+    break if scenario_index > NUM_QUESTIONS_TOTAL
     system('say "Time for a break"')
     display_break
 end
+
+system "clear"
+puts "Well done! You have completed the Casper test simulation."
+    .colorize(:yellow)
+system('say "Well done"')
