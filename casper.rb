@@ -5,13 +5,13 @@ NUM_QUESTIONS_TOTAL = 12
 NUM_QUESTIONS_PER_PERIOD = 6
 
 # Fake variables for testing # TODO Remove
-WELCOME_TIME_S = 4
-SCENARIO_TIME_S = 4
-QUESTION_TIME_S = 10
-BREAK_TIME_S = 10
+WELCOME_TIME_S = 1
+SCENARIO_TIME_S = 1
+QUESTION_TIME_S = 1
+BREAK_TIME_S = 1
 
 # Real variables TODO Enable
-WELCOME_TIME_S = 30
+# WELCOME_TIME_S = 15
 # SCENARIO_TIME_S = 60
 # QUESTION_TIME_S = 5 * 60
 # BREAK_TIME_S = 10 * 60
@@ -25,24 +25,27 @@ def display_welcome
     puts "There will be a break after #{NUM_QUESTIONS_PER_PERIOD} questions."
         .colorize(:cyan)
     puts "\n"
-    display_progress_bar(5)
+    display_progress_bar(WELCOME_TIME_S)
 end
 
 def display_scenario(index)
     system "clear"
-    puts "This is the scenario #{index.to_s}"
+    puts "Scenario #{index.to_s}".colorize(:yellow)
+    puts "\n"
     display_progress_bar(SCENARIO_TIME_S)
 end
 
 def display_questions(index)
     system "clear"
-    puts "These are the questions for scenario #{index.to_s}"
+    puts "Scenario #{index.to_s} Questions".colorize(:yellow)
+    puts "\n"
     display_progress_bar(QUESTION_TIME_S)
 end
 
 def display_break
     system "clear"
     puts "This is a break"
+    puts "\n"
     display_progress_bar(BREAK_TIME_S)
 end
 
@@ -70,9 +73,12 @@ display_welcome
 scenario_index = 1
 while scenario_index <= NUM_QUESTIONS_TOTAL do
     (1..NUM_QUESTIONS_PER_PERIOD).each do |_|
+        system('say ' + "Scenario #{scenario_index.to_s}")
         display_scenario(scenario_index)
+        system('say ' + "Questions for scenario #{scenario_index.to_s}")
         display_questions(scenario_index)
         scenario_index += 1
     end
+    system('say "Time for a break"')
     display_break
 end
