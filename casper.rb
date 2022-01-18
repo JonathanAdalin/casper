@@ -1,5 +1,5 @@
 require 'colorize'
-require 'ruby-progressbar'
+require 'time'
 
 NUM_QUESTIONS_TOTAL = 12
 NUM_QUESTIONS_PER_PERIOD = 6
@@ -15,46 +15,45 @@ def display_welcome
     puts "There will be a break after #{NUM_QUESTIONS_PER_PERIOD} questions."
         .colorize(:cyan)
     puts "\n"
-    display_progress_bar(WELCOME_TIME_S)
+    display_countdown(WELCOME_TIME_S)
 end
 
 def display_scenario(index)
     system "clear"
     puts "Scenario #{index.to_s}".colorize(:yellow)
     puts "\n"
-    display_progress_bar(SCENARIO_TIME_S)
+    display_countdown(SCENARIO_TIME_S)
 end
 
 def display_questions(index)
     system "clear"
     puts "Scenario #{index.to_s} Questions".colorize(:yellow)
     puts "\n"
-    display_progress_bar(QUESTION_TIME_S)
+    display_countdown(QUESTION_TIME_S)
 end
 
 def display_break
     system "clear"
     puts "Break Time".colorize(:yellow)
     puts "\n"
-    display_progress_bar(BREAK_TIME_S)
+    display_countdown(BREAK_TIME_S)
 end
 
-def display_progress_bar(total_time_s)
-    progressbar_max_iterations = 80;
-    progressbar = ProgressBar.create(
-        :total => progressbar_max_iterations,
-        :title => "Time Left On This Screen", 
-        :progress_mark => " ", 
-        :remainder_mark => "=")
+def display_countdown(total_time_s)
     start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
     elapsed_time_s = 0
     while elapsed_time_s < total_time_s do
-        progressbar.increment
-        sleep(total_time_s.to_f / progressbar_max_iterations)
         elapsed_time_s = 
             Process.clock_gettime(Process::CLOCK_MONOTONIC) - start_time
+        remaining_time_s = (total_time_s - elapsed_time_s)
+            .round
+        remaining_time_readable =
+            "#{format('%02d', (remaining_time_s / 60))} min " \
+            + "#{format('%02d', (remaining_time_s % 60))} s"
+        print "Remaining Time: #{remaining_time_readable}" + "\r"
+        $stdout.flush
+        sleep(1)
     end
-    progressbar.finish
 end
 
 # Main
